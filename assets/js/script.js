@@ -33,6 +33,11 @@ function generatePassword() {
     alert("Please enter a number");
     password = generatePassword();
     return password;
+  } else if (!passwordLength) {
+    password = "";
+    return password;
+  } else {
+    passwordLength = parseInt(passwordLength);
   }
 
   // WHEN asked for character types to include in the password
@@ -44,7 +49,13 @@ function generatePassword() {
 
   // THEN my input should be validated and at least one character type should be selected
   if (lowercase || uppercase || numeric || special) {
-    password = "securepassword";
+    password = createPassword(
+      lowercase,
+      uppercase,
+      numeric,
+      special,
+      passwordLength
+    );
   } else {
     alert("Please select at least one character type");
     password = generatePassword();
@@ -57,24 +68,42 @@ function generatePassword() {
   return password;
 }
 
-function createPassword() {
+function createPassword(lower, upper, num, spec, pwl) {
   var password = "";
+  var chars = "";
+
+  if (lower) {
+    chars += "abcdefghijklmnopqrstuvwxyz";
+  }
+  if (upper) {
+    chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  }
+  if (num) {
+    chars += "0123456789";
+  }
+  if (spec) {
+    chars += "!@#$%^&*()_+-=,./;'[]<>?:{}";
+  }
+
+  for (let i = 0; i < pwl; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
 
   return password;
 }
 
 // code borrowed from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-function makeid(length) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-}
+// function makeid(length) {
+//   let result = "";
+//   const characters =
+//     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+//   const charactersLength = characters.length;
+//   let counter = 0;
+//   while (counter < length) {
+//     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+//     counter += 1;
+//   }
+//   return result;
+// }
 
-console.log(makeid(8));
+// console.log(makeid(8));
